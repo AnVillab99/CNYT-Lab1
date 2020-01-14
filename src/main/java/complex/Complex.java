@@ -11,14 +11,18 @@ public class Complex {
 		parteReal=sa;
 		parteImaginaria=sb;
 	}
+	public Complex(Double sa, Double sb) {
+		parteReal=new BigDecimal(sa);
+		parteImaginaria=new BigDecimal(sb);
+	}
 	
 	public Complex Add (Complex c) {
 		return new Complex(this.parteReal.add(c.getReal()) , this.getImag().add(c.getImag()));
 		
 	}
 	
-	public Complex Subtract (Complex c) {
-		return new Complex(this.parteReal.subtract(c.getReal()) , this.getImag().subtract(c.getImag()));
+	public Complex Subtract (Complex c) {		
+		return new Complex(this.parteReal.subtract(c.getReal()) , this.getImag().subtract(c.getImag())); 
 		
 	}
 	
@@ -76,6 +80,23 @@ public class Complex {
 	}
 	public BigDecimal getImag() {
 		return parteImaginaria;
+	}
+	
+	public boolean equals(Complex c) {
+		BigDecimal a= this.parteReal;
+		BigDecimal A=c.getReal();
+		BigDecimal b=this.getImag();
+		BigDecimal B=c.getImag();
+		//System.out.println(a);System.out.println(A);System.out.println(b);System.out.println(B);
+		if ((Math.abs((c.getImag().subtract(this.getImag())).doubleValue())<=0.000001) && 
+				(Math.abs((c.getReal().subtract(this.getReal())).doubleValue())<=0.000001)){
+			return true;
+		}
+		return false;
+	}
+	
+	public String print() {
+		return "( "+this.getReal()+" , "+this.getImag()+" )";
 	}
 	
 
