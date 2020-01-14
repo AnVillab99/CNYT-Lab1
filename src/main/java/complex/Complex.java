@@ -1,6 +1,7 @@
 package complex;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 public class Complex {
 	private BigDecimal parteReal;
@@ -42,19 +43,26 @@ public class Complex {
 		
 	}
 	
-	public Complex Modulo (Complex c) {
-		return new Complex(this.parteReal+c.getReal() , this.getImag() + c.getImag());
-		
-	}
-	public Complex Conjugada (Complex c) {
-		return new Complex(this.parteReal+c.getReal() , this.getImag() + c.getImag());
+	public BigDecimal Modulo () {
+		MathContext mc = new MathContext(10);
+		BigDecimal a= this.parteReal;
+		BigDecimal b=this.getImag();
+		BigDecimal x = a.multiply(a).add(b.multiply(b));		
+		return new BigDecimal(Math.sqrt(x.doubleValue()));
 		
 	}
 	
-	public Complex Convert (Complex c) {
-		return new Complex(this.parteReal+c.getReal() , this.getImag() + c.getImag());
+	public Complex Conjugada () {
+		return new Complex(this.getReal() , this.getImag().negate());
 		
 	}
+	
+	public Complex Convert () {
+		
+		return new Complex(this.Modulo() , new BigDecimal(Math.atan2( this.getImag().doubleValue() , this.getReal().doubleValue())));
+		
+	}
+	
 	
 	
 	
