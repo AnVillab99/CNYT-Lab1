@@ -32,26 +32,42 @@ public class ComplexTest extends TestCase {
 	public void testMultiply() {
 		Complex a = new Complex (5.87,-3.7);
 		Complex b = new Complex (2.0, 5.9);
-		Complex resultado = new Complex (33.43,26.82);		
+		Complex resultado = new Complex (33.57,27.233);		
 		Complex c = a.Multiply(b);
-		System.out.println(c.print());
 		Assert.assertTrue(resultado.equals(c));
 	}
 
 	public void testDivide() {
-		fail("Not yet implemented");
+		Complex a = new Complex (5.87,-3.7);
+		Complex b = new Complex (2.0, 5.9);
+		Complex resultado = new Complex (-0.25998454,-1.08304560);		
+		Complex c = a.Divide(b);
+		Assert.assertTrue(resultado.equals(c));
 	}
 
 	public void testModulo() {
-		fail("Not yet implemented");
+		Complex a = new Complex (5.87,-3.7);
+		double resultado = 6.93879672;
+		Assert.assertTrue(Math.abs(resultado-a.Modulo())<=0.00000001);
 	}
 
 	public void testConjugada() {
-		fail("Not yet implemented");
+		Complex a = new Complex (5.87,-3.7);
+		Complex c = new Complex (5.87,3.7);		
+		Assert.assertTrue(a.Conjugada().equals(c));
+		
 	}
 
 	public void testConvert() {
-		fail("Not yet implemented");
+		Complex a = new Complex (5.87,-3.7);
+		Complex resultado = new Complex(6.9388,-32.2242);
+		Complex c = a.Convert();
+		System.out.println(a.Modulo());
+		System.out.println(c.getImag());
+		System.out.println(c.getReal());
+		System.out.println(Math.abs(c.getImag()-resultado.getImag()));
+		System.out.println(Math.abs(c.getReal()-resultado.getReal()));
+		Assert.assertTrue(resultado.equals(c));
 	}
 
 	public void testGetReal() {
