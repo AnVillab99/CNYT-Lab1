@@ -6,7 +6,10 @@ import junit.framework.TestCase;
 public class ComplexTest extends TestCase {
 
 	public void testComplex() {
-		fail("Not yet implemented");
+		Complex a = new Complex (5.87,-3.7);
+		Complex b = new Complex (5.87,-3.7);
+		Assert.assertTrue(a.equals(b));
+		
 	}
 	
 	
@@ -16,10 +19,8 @@ public class ComplexTest extends TestCase {
 		Complex resultado = new Complex (7.87, 2.2);
 		Complex c = a.Add(b);
 		Assert.assertTrue(resultado.equals(c));
-		//Assert.assertEquals(a.Add(b),resultado);
-		
-		//fail("Not yet implemented");
 	}
+		
 
 	public void testSubtract() {
 		Complex a = new Complex (5.87,-3.7);
@@ -40,8 +41,9 @@ public class ComplexTest extends TestCase {
 	public void testDivide() {
 		Complex a = new Complex (5.87,-3.7);
 		Complex b = new Complex (2.0, 5.9);
-		Complex resultado = new Complex (-0.25998454,-1.08304560);		
+		Complex resultado = new Complex (-0.259985,-1.083046);		
 		Complex c = a.Divide(b);
+		
 		Assert.assertTrue(resultado.equals(c));
 	}
 
@@ -62,20 +64,19 @@ public class ComplexTest extends TestCase {
 		Complex a = new Complex (5.87,-3.7);
 		Complex resultado = new Complex(6.9388,-32.2242);
 		Complex c = a.Convert();
-		System.out.println(a.Modulo());
-		System.out.println(c.getImag());
-		System.out.println(c.getReal());
-		System.out.println(Math.abs(c.getImag()-resultado.getImag()));
-		System.out.println(Math.abs(c.getReal()-resultado.getReal()));
 		Assert.assertTrue(resultado.equals(c));
 	}
 
 	public void testGetReal() {
-		fail("Not yet implemented");
+		Complex a = new Complex (5.87,-3.7);
+		double c = 5.87;
+		Assert.assertTrue(c==a.getReal());
 	}
 
 	public void testGetImag() {
-		fail("Not yet implemented");
+		Complex a = new Complex (5.87,-3.7);
+		double c = -3.7;
+		Assert.assertTrue(c==a.getImag());
 	}
 
 }

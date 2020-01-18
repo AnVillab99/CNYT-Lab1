@@ -1,6 +1,8 @@
 package complex;
 
+import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class Complex {
 	private double parteReal;
@@ -37,9 +39,14 @@ public class Complex {
 		double B = c.getImag();
 		double Q = ((a * A) + (b * B)) / ((A * A) + (B * B));
 		double W = ((b * A) - (a * B)) / ((A * A) + (B * B));
+		BigDecimal real = new BigDecimal(Q).setScale(6, RoundingMode.HALF_UP);
+        double dReal = real.doubleValue();
+        BigDecimal imag = new BigDecimal(W).setScale(6, RoundingMode.HALF_UP);
+        double dImag = imag.doubleValue();
+		return new Complex(dReal, dImag);
 
-		return new Complex(Q, W);
 
+	
 	}
 
 	public double Modulo() {
@@ -56,8 +63,12 @@ public class Complex {
 	}
 
 	public Complex Convert() {
-
-		return new Complex(this.Modulo(), (Math.atan2(this.getImag(), this.getReal())));
+		double x = this.getImag()/this.getReal();
+		BigDecimal real = new BigDecimal(this.Modulo()).setScale(4, RoundingMode.HALF_UP);
+        double dReal = real.doubleValue();
+        BigDecimal imag = new BigDecimal(Math.toDegrees(Math.atan(x))).setScale(4, RoundingMode.HALF_UP);
+        double dImag = imag.doubleValue();
+		return new Complex(dReal, dImag);
 
 	}
 
@@ -81,6 +92,7 @@ public class Complex {
 		// System.out.println(" c " +Math.abs(a-A));
 		// System.out.println(Math.abs(a-A)<0.000001);
 		// System.out.println(" p " +Math.abs(b-B));
+		
 		if ((Math.abs((c.getImag() - (this.getImag()))) <= 0.0000001)
 				&& (Math.abs((c.getReal() - (this.getReal()))) <= 0.0000001)) {
 			return true;
