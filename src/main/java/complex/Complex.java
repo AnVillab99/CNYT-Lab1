@@ -71,6 +71,13 @@ public class Complex {
 		return new Complex(dReal, dImag);
 
 	}
+	
+	public double Phase() {
+		double x = this.getImag()/this.getReal();
+		BigDecimal imag = new BigDecimal(Math.toDegrees(Math.atan(x))).setScale(4, RoundingMode.HALF_UP);
+        double phase = imag.doubleValue();
+        return phase;
+	}
 
 	public double getReal() {
 		return parteReal;

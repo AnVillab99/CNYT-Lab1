@@ -78,5 +78,13 @@ public class ComplexTest extends TestCase {
 		double c = -3.7;
 		Assert.assertTrue(c==a.getImag());
 	}
+	
+	public void testPhase() {
+		Complex a = new Complex (5.87,-3.7);
+		Double resultado = -32.2242;
+		Double c = a.Phase();
+		Assert.assertTrue(resultado.equals(c));
+		
+	}
 
 }
