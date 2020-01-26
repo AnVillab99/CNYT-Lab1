@@ -3,20 +3,43 @@ package com.cnyt.app.Complex_Calc.Matrix;
 import java.util.ArrayList;
 
 import Matrix.ComplexMatrix;
+import org.junit.Test;
 import Vector.ComplexVector;
 import complex.Complex;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class matrixTest extends TestCase {
-
-    public void testComplex() {
+/*
+    @Test
+    public void testComplexAddition() {
 
         try {
             ComplexMatrix cm1 = new ComplexMatrix(crearVector1());
             ComplexMatrix cm2 = new ComplexMatrix(crearVector2());
             ComplexMatrix cm3 = cm1.addition(cm2);
             cm3.print();
+            cm1=cm1.addition(cm2);
+            Assert.assertTrue(true);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
+
+
+    }*/
+
+    @Test
+    public void testComplexMultiplication() {
+
+        try {
+            ComplexMatrix cm1 = new ComplexMatrix(crearVector1());
+            ComplexMatrix cm2 = new ComplexMatrix(crearVector2());
+            ComplexMatrix cm3 = cm1.multiply(cm2);
+            cm3.print();
+            cm1=cm1.addition(cm2);
             Assert.assertTrue(true);
         } catch (Exception e) {
             // TODO Auto-generated catch block

@@ -26,12 +26,12 @@ public class Complex {
 	}
 
 	public Complex Add(Complex c) {
-		return new Complex(this.parteReal + c.getReal(), this.getImag() + c.getImag());
+		return new Complex((double)(this.parteReal + c.getReal()), (double)(this.getImag() + c.getImag()));
 
 	}
 
 	public Complex Subtract(Complex c) {
-		return new Complex(this.parteReal - c.getReal(), this.getImag() - c.getImag());
+		return new Complex((double)(this.parteReal - c.getReal()), (double)(this.getImag() - c.getImag()));
 
 	}
 
@@ -40,20 +40,22 @@ public class Complex {
 		double A = c.getReal();
 		double b = this.getImag();
 		double B = c.getImag();
-		return new Complex((a * A) - (b * B), (a * B + A * b));
+		double C=(a * A) - (b * B);
+		double D=(a * B + A * b);
+		return new Complex(C,D);
 
 	}
 
 	public Complex SMultiply(double c){
 		double a = this.parteReal;
 		double b = this.getImag();
-		return new Complex((a * c), b);
+		return new Complex((double)(a * c), b);
 	}
 
 	public Complex inverse(){
 		double a = this.parteReal;
 		double b = this.getImag();
-		return new Complex(-a, -b);
+		return new Complex((double)-a,(double) -b);
 
 	}
 
@@ -68,14 +70,14 @@ public class Complex {
         double dReal = real.doubleValue();
         BigDecimal imag = new BigDecimal(W).setScale(6, RoundingMode.HALF_UP);
         double dImag = imag.doubleValue();
-		return new Complex(dReal, dImag);
+		return new Complex((double)dReal, (double)dImag);
 	
 	}
 
 	public Complex SDivide(int c){
 		double a = this.parteReal;
 		double b = this.getImag();
-		return new Complex((a / c), (b/c));
+		return new Complex((double)(a / c), (double)(b/c));
 
 
 	}
@@ -99,7 +101,7 @@ public class Complex {
         double dReal = real.doubleValue();
         BigDecimal imag = new BigDecimal(Math.toDegrees(Math.atan(x))).setScale(4, RoundingMode.HALF_UP);
         double dImag = imag.doubleValue();
-		return new Complex(dReal, dImag);
+		return new Complex((double)dReal, (double)dImag);
 
 	}
 	
@@ -107,7 +109,7 @@ public class Complex {
 		double x = this.getImag()/this.getReal();
 		BigDecimal imag = new BigDecimal(Math.toDegrees(Math.atan(x))).setScale(4, RoundingMode.HALF_UP);
         double phase = imag.doubleValue();
-        return phase;
+        return (double)phase;
 	}
 
 	public double getReal() {

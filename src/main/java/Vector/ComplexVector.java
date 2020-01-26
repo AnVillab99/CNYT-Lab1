@@ -31,14 +31,13 @@ public class ComplexVector {
      * @param v Complex[] array
      */
     public ComplexVector(Complex[] v) {
-        ArrayList<Complex> values2 = new ArrayList<Complex>(v.length);
+        values = new ArrayList<Complex>();
         for (Complex c : v) {
-            values2.add(c);
+            values.add(c);
         }
-        size = values2.size();
-        values = values2;
+        size = values.size();
+
         mod = 1;
-        
 
     }
 
@@ -48,10 +47,12 @@ public class ComplexVector {
      * @param v ArrayList<Complex>
      */
     public ComplexVector(ArrayList<Complex> v) {
+        values = new ArrayList<Complex>();
         for (Complex x : v) {
             values.add(x);
         }
         size = v.size();
+        mod = 1;
     }
 
     /**
@@ -62,19 +63,19 @@ public class ComplexVector {
      * @throws ComplexVectorException
      */
     public ComplexVector(HashSet<Double[]> v) throws ComplexVectorException {
-        ArrayList<Complex> values2 = new ArrayList<Complex>(v.size());
+        values = new ArrayList<Complex>();
         for (Double[] x : v) {
 
             Complex c;
             if (x.length == 0) {
                 c = new Complex(0, 0);
-                values2.add(c);
+                values.add(c);
             } else if (x.length == 1) {
                 c = new Complex(x[0], 0);
-                values2.add(c);
+                values.add(c);
             } else if (x.length == 2) {
                 c = new Complex(x[0], x[1]);
-                values2.add(c);
+                values.add(c);
             } else {
                 values = null;
                 // Exception hay uno o mas valores no validos
@@ -83,7 +84,6 @@ public class ComplexVector {
 
         }
         size = v.size();
-        values = values2;
         mod = 1;
 
     }
@@ -153,11 +153,18 @@ public class ComplexVector {
      * @param v ArrayList<Complex>
      */
     public void add(ArrayList<Complex> v) {
+
         if (mod == 0) {
+            values = new ArrayList<Complex>();
+
             for (Complex x : v) {
+
                 values.add(x);
             }
+            size = v.size();
+            mod = 1;
         }
+
     }
 
     public int getSize() {
@@ -166,15 +173,16 @@ public class ComplexVector {
 
     /**
      * returns the complex vector of the vector
+     * 
      * @return
      */
     public ArrayList<Complex> getVector() {
         return values;
     }
 
-
     /**
      * Returns the addition of the given and this ComplexVector
+     * 
      * @param cv the other ComplexVector
      * @return the added vector
      * @throws Exception if the other vector has a diferent dimension
@@ -187,6 +195,7 @@ public class ComplexVector {
             ArrayList<Complex> v2 = cv.getVector();
             for (int i = 0; i < v2.size(); i++) {
                 vr.add(v2.get(i).Add(values.get(i)));
+
             }
             r.add(vr);
             return r;
@@ -198,6 +207,7 @@ public class ComplexVector {
 
     /**
      * Returns the substraction of the given and this ComplexVector
+     * 
      * @param cv the other ComplexVector
      * @return the substracted vector
      * @throws Exception if the other vector has a diferent dimension
@@ -235,33 +245,33 @@ public class ComplexVector {
 
     }
 
-    
     /**
-      * Return the escalar multiplication of the given vector and this one
+     * Return the escalar multiplication of the given vector and this one
+     * 
      * @param cv Given ComplexVector
      * @return double the scalar multipication
      * @throws Exception if the gicen vector has another dimension
      */
-    public Complex dotMultiplication( ComplexVector cv) throws Exception{
-        if(cv.getSize() == this.size){
-            Complex r = new Complex(0,0);
+    public Complex dotMultiplication(ComplexVector cv) throws Exception {
+        if (cv.getSize() == this.size) {
+            Complex r = new Complex(0, 0);
             ArrayList<Complex> v2 = cv.getVector();
-            for (int i = 0; i < v2.size(); i++) {                
-                r.Add(values.get(i).Multiply(v2.get(i)));                
+            for (int i = 0; i < v2.size(); i++) {
+                r.Add(values.get(i).Multiply(v2.get(i)));
             }
             return r;
-        }
-        else throw new Exception();
-
+        } else
+            throw new Exception();
 
     }
 
     /**
      * Return the ComplexVector multiplied by a complex
+     * 
      * @param c the complex to multiply
      * @return multiplied ComplexVector
      */
-    public ComplexVector EscMultiplication( Complex c) {
+    public ComplexVector EscMultiplication(Complex c) {
         ComplexVector r = new ComplexVector();
         ArrayList<Complex> vr = new ArrayList<Complex>();
         for (int i = 0; i < values.size(); i++) {
@@ -269,7 +279,6 @@ public class ComplexVector {
         }
         r.add(vr);
         return r;
-
 
     }
 
@@ -282,28 +291,31 @@ public class ComplexVector {
      * @throws Exception
      */
     public Complex matrixAdition(ComplexVector c) throws Exception {
-        if(c.getSize()==size){
+        if (c.getSize() == size) {
             Complex res = new Complex(0, 0);
-            
-            for (int i=0; i<size;i++){
-                res.Add(c.getVector().get(i).Multiply(values.get(i)));
-            }
-            return res;
-        }
-        else throw new Exception();
 
+            for (int i = 0; i < size; i++) {
+                Complex T =values.get(i).Multiply(c.getVector().get(i));
+               
+            
+                res=res.Add(T);
+            }
+            System.out.println(" de la matrix adition :"+res.print());
+            
+            return res;
+        } else
+            throw new Exception();
 
     }
 
-	public void print() {
-        String s ="";
-        for (Complex c: values){
-            s+="[ "+c.print()+" ]";
+    public void print() {
+        String s = "";
+        for (Complex c : values) {
+
+            s += "[ " + c.print() + " ]";
 
         }
         System.out.println(s);
-	}
-
-    
+    }
 
 }

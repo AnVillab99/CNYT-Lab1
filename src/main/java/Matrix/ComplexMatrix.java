@@ -69,6 +69,12 @@ public class ComplexMatrix {
 
     }
 
+    /**
+     * Add complex vectors from arraylist
+     * 
+     * @param H
+     * @throws Exception
+     */
     public void add(ArrayList<ComplexVector> H) throws Exception {
         Matrix = new ArrayList<ComplexVector>();
         int sV = H.get(0).getSize();
@@ -94,7 +100,7 @@ public class ComplexMatrix {
 
         if ((D.getI() == I && D.getJ() == J)) {
             ArrayList<ComplexVector> B = new ArrayList<ComplexVector>();
-            for (int a = 0; a <= I; a++) {
+            for (int a = 0; a < I; a++) {
                 B.add(D.getRow(a).Addition(Matrix.get(a)));
 
             }
@@ -114,7 +120,7 @@ public class ComplexMatrix {
     public ComplexMatrix substract(ComplexMatrix D) throws Exception {
         if ((D.getI() == I && D.getJ() == J)) {
             ArrayList<ComplexVector> B = new ArrayList<ComplexVector>();
-            for (int a = 0; a <= I; a++) {
+            for (int a = 0; a < I; a++) {
                 B.add(D.getRow(a).Substraction(Matrix.get(a)));
 
             }
@@ -147,65 +153,75 @@ public class ComplexMatrix {
 
     }
 
+    /**
+     * Multiplies 2 matrixes
+     * 
+     * @param c
+     * @return
+     * @throws Exception
+     */
     public ComplexMatrix multiply(ComplexMatrix c) throws Exception {
         // A x B
-        if (J == c.getI()) {
-            ComplexMatrix cm = new ComplexMatrix();
-            ArrayList<ComplexVector> acv = new ArrayList<ComplexVector>();
+        try {
+            if (J == c.getI()) {
+                ComplexMatrix cm = new ComplexMatrix();
+                ArrayList<ComplexVector> acv = new ArrayList<ComplexVector>();
 
-            for (int i = 0; i < I; i++) {// itera por las filas (I) de la matriz A
-                ArrayList<Complex> ac1 = new ArrayList<Complex>();
+                for (int i = 0; i < I; i++) {// itera por las filas (I) de la matriz A
+                    ArrayList<Complex> ac1 = new ArrayList<Complex>();
 
-                for (int j = 0; j < c.getJ(); j++) { // itera por las columnas(J) de B
-                    ArrayList<Complex> ac2 = new ArrayList<Complex>(); // AL<C> que seria la columna j
-                    for (ComplexVector cv : c.getMatrix()) {
-                        ac2.add(cv.getVector().get(j));
-                    }
-                    try {
+                    for (int j = 0; j < c.getJ(); j++) { // itera por las columnas(J) de B
+                        ArrayList<Complex> ac2 = new ArrayList<Complex>(); // AL<C> que seria la columna j
+                        for (ComplexVector cv : c.getMatrix()) {
+                            ac2.add(cv.getVector().get(j));
+                        }
+                        
+
                         ac1.add(Matrix.get(i).matrixAdition(new ComplexVector(ac2)));
-                    } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+
                     }
+
+                    acv.add(new ComplexVector(ac1));
 
                 }
-
-                acv.add(new ComplexVector(ac1));
-
+                try {
+                    cm.add(acv);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return cm;
+            } else {
+                throw new Exception();
             }
-            try {
-                cm.add(acv);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            return cm;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
         }
-        else{throw new Exception();}
+        return null;
     }
 
     public ArrayList<ComplexVector> getMatrix() {
         return Matrix;
     }
 
-
     public int getI() {
         return I;
     }
-
-
 
     public int getJ() {
         return J;
     }
 
-    public ComplexVector getRow(int i) {return Matrix.get(i);}
+    public ComplexVector getRow(int i) {
+        return Matrix.get(i);
+    }
 
-	public void  print() {
-		for(ComplexVector cv :Matrix){
+    public void print() {
+        for (ComplexVector cv : Matrix) {
             cv.print();
         }
-	}
-
+    }
 
 }

@@ -3,10 +3,12 @@ package com.cnyt.app.Complex_Calc.complex;
 import complex.Complex;
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 
 public class ComplexTest extends TestCase {
 
+	@Test
 	public void testComplex() {
 		Complex a = new Complex (5.87,-3.7);
 		Complex b = new Complex (5.87,-3.7);
