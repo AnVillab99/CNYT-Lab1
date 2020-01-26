@@ -7,9 +7,10 @@ import complex.Complex;
 
 public class ComplexMatrix {
 
-    private ArrayList<ComplexVector> Matrix; // Matrix
+    private Complex[][] Matrix; // Matrix
     private int I; // Filas
     private int J; // Columnas
+    private int mod = 0;
 
     /**
      * Empty ComplexMatrix constructor of i rows and j columns
@@ -18,13 +19,19 @@ public class ComplexMatrix {
      * @param j columns
      */
     public ComplexMatrix(int i, int j) {
-        Matrix = new ArrayList<ComplexVector>();
+        Matrix = new Complex[j][i];
         I = i;
         J = j;
     }
 
     public ComplexMatrix() {
 
+    }
+
+    public ComplexMatrix(Complex[][] c) {
+        I = c.length;
+        J = c[0].length;
+        Matrix = c;
     }
 
     /**
@@ -35,16 +42,21 @@ public class ComplexMatrix {
      *                   size;
      */
     public ComplexMatrix(ComplexVector[] H) throws Exception {
-        Matrix = new ArrayList<ComplexVector>();
+        Matrix = new Complex[H.length][H[0].getSize()];
         int sV = H[0].getSize();
-        for (ComplexVector cv : H) {
-            if (!(cv.getSize() == sV))
+        for (int i = 0; i < H.length; i++) {
+            if (!(H[i].getSize() == sV)) {
                 throw new Exception();
-            Matrix.add(cv);
+            }
+            for (int j = 0; j < H[0].getSize(); j++) {
+                Matrix[i][j] = H[i].getVector().get(j);
+
+            }
 
         }
-        J = H.length;
-        I = sV;
+        I = H.length;
+        J = H[0].getSize();
+        mod = 1;
 
     }
 
@@ -56,17 +68,33 @@ public class ComplexMatrix {
      *                   size;
      */
     public ComplexMatrix(ArrayList<ComplexVector> H) throws Exception {
-        Matrix = new ArrayList<ComplexVector>();
-        int sV = H.get(0).getSize();
-        for (ComplexVector cv : H) {
-            if (!(cv.getSize() == sV))
+        Matrix = new Complex[H.size()][H.get(0).getSize()];
+
+        for (int i = 0; i < H.size(); i++) {
+            if (!(H.get(i).getSize() == H.get(0).getSize())) {
                 throw new Exception();
-            Matrix.add(cv);
+            }
+            for (int j = 0; j < H.get(0).getSize(); j++) {
+                Matrix[i][j] = H.get(i).getVector().get(j);
+
+            }
 
         }
-        J = H.size();
-        I = sV;
+        I = H.size();
+        J = H.get(0).getSize();
+        mod = 1;
 
+    }
+
+    /**
+     * Para modificacion interna, modificar libremente en la matriz en i j
+     * 
+     * @param i fila
+     * @param j columna
+     * @param c nuevo valor
+     */
+    private void modificar(int i, int j, Complex c) {
+        Matrix[i][j] = c;
     }
 
     /**
@@ -76,16 +104,23 @@ public class ComplexMatrix {
      * @throws Exception
      */
     public void add(ArrayList<ComplexVector> H) throws Exception {
-        Matrix = new ArrayList<ComplexVector>();
-        int sV = H.get(0).getSize();
-        for (ComplexVector cv : H) {
-            if (!(cv.getSize() == sV))
-                throw new Exception();
-            Matrix.add(cv);
+        if (mod == 0) {
+            Matrix = new Complex[H.size()][H.get(0).getSize()];
 
+            for (int i = 0; i < H.size(); i++) {
+                if (!(H.get(i).getSize() == H.get(0).getSize())) {
+                    throw new Exception();
+                }
+                for (int j = 0; j < H.get(0).getSize(); j++) {
+                    Matrix[i][j] = H.get(i).getVector().get(j);
+
+                }
+
+            }
+            I = H.size();
+            J = H.get(0).getSize();
+            mod = 1;
         }
-        J = H.size();
-        I = sV;
 
     }
 
@@ -97,17 +132,18 @@ public class ComplexMatrix {
      * @throws Exception if the matrixes arent the same dimensions
      */
     public ComplexMatrix addition(ComplexMatrix D) throws Exception {
-
         if ((D.getI() == I && D.getJ() == J)) {
-            ArrayList<ComplexVector> B = new ArrayList<ComplexVector>();
+            ComplexMatrix res = new ComplexMatrix(I, J);
+
             for (int a = 0; a < I; a++) {
-                B.add(D.getRow(a).Addition(Matrix.get(a)));
+                for (int b = 0; b < J; b++) {
+                    res.modificar(a, b, D.getMatrix()[a][b].Add(Matrix[a][b]));
+                }
 
             }
-            return new ComplexMatrix(B);
+            return res;
         } else
             return null; // Toca poner una excepcion
-
     }
 
     /**
@@ -119,12 +155,15 @@ public class ComplexMatrix {
      */
     public ComplexMatrix substract(ComplexMatrix D) throws Exception {
         if ((D.getI() == I && D.getJ() == J)) {
-            ArrayList<ComplexVector> B = new ArrayList<ComplexVector>();
+            ComplexMatrix res = new ComplexMatrix(I, J);
+
             for (int a = 0; a < I; a++) {
-                B.add(D.getRow(a).Substraction(Matrix.get(a)));
+                for (int b = 0; b < J; b++) {
+                    res.modificar(a, b, Matrix[a][b].Subtract(D.getMatrix()[a][b]));
+                }
 
             }
-            return new ComplexMatrix(B);
+            return res;
         } else
             return null; // Toca poner una excepcion
 
@@ -138,13 +177,16 @@ public class ComplexMatrix {
      */
     public ComplexMatrix inverse() {
         try {
-            ArrayList<ComplexVector> sm = new ArrayList<ComplexVector>();
-            for (ComplexVector cv : Matrix) {
-                sm.add(cv.Invert());
+            ComplexMatrix res = new ComplexMatrix(I, J);
 
+            for (int a = 0; a < I; a++) {
+                for (int b = 0; b < J; b++) {
+                    res.modificar(a, b, Matrix[a][b].inverse());
+
+                }
+
+                return res;
             }
-
-            return new ComplexMatrix(sm);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -163,46 +205,233 @@ public class ComplexMatrix {
     public ComplexMatrix multiply(ComplexMatrix c) throws Exception {
         // A x B
         try {
+            ComplexMatrix res = new ComplexMatrix(I, c.getJ());
             if (J == c.getI()) {
-                ComplexMatrix cm = new ComplexMatrix();
-                ArrayList<ComplexVector> acv = new ArrayList<ComplexVector>();
-
-                for (int i = 0; i < I; i++) {// itera por las filas (I) de la matriz A
-                    ArrayList<Complex> ac1 = new ArrayList<Complex>();
-
-                    for (int j = 0; j < c.getJ(); j++) { // itera por las columnas(J) de B
-                        ArrayList<Complex> ac2 = new ArrayList<Complex>(); // AL<C> que seria la columna j
-                        for (ComplexVector cv : c.getMatrix()) {
-                            ac2.add(cv.getVector().get(j));
-                        }
-                        
-
-                        ac1.add(Matrix.get(i).matrixAdition(new ComplexVector(ac2)));
-
+                for (int i = 0; i < I; i++) {
+                    Complex[] ca = new Complex[J]; // almacena la horizaontal de la 1
+                    for (int j = 0; j < J; j++) {
+                        ca[j] = Matrix[i][j];
                     }
 
-                    acv.add(new ComplexVector(ac1));
+                    for (int b = 0; b < c.getJ(); b++) {
+                        Complex[] cb = new Complex[c.getI()]; // almacena la vertical de B
+                        for (int a = 0; a < c.getI(); a++) {
+                            cb[a] = c.getMatrix()[a][b];
+                        }
+                        ComplexVector v1 = new ComplexVector(ca);
+                        ComplexVector v2 = new ComplexVector(cb);
+                        res.modificar(i, b, v1.matrixAdition(v2));
+                    }
 
                 }
-                try {
-                    cm.add(acv);
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                return cm;
+                return res;
+
             } else {
                 throw new Exception();
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return null;
 
         }
-        return null;
+
     }
 
-    public ArrayList<ComplexVector> getMatrix() {
+    /**
+     * Resturn the transponse of the matrix
+     * 
+     * @return
+     */
+    public ComplexMatrix transpose() {
+        ComplexMatrix res = new ComplexMatrix(I, J);
+
+        for (int a = 0; a < I; a++) {
+            for (int b = 0; b < J; b++) {
+                res.modificar(a, b, Matrix[b][a]);
+            }
+        }
+        return res;
+
+    }
+
+    /**
+     * Returns the conjugate of the matrix
+     * 
+     * @return
+     */
+    public ComplexMatrix conjugate() {
+        ComplexMatrix res = new ComplexMatrix(I, J);
+
+        for (int a = 0; a < I; a++) {
+            for (int b = 0; b < J; b++) {
+                res.modificar(a, b, Matrix[a][b].Conjugada());
+            }
+        }
+        return res;
+    }
+
+    /**
+     * returns the adjoint of the matrix
+     * 
+     * @return
+     */
+    public ComplexMatrix adjoint() {
+        return this.transpose().conjugate();
+    }
+
+    public Complex trace() {
+        Complex c = new Complex(0, 0);
+        for (int i = 0; i < I; i++) {
+            c = c.Add(Matrix[i][i]);
+
+        }
+        return c;
+    }
+
+    /**
+     * Inner product of this and other matrix = trace (At*B)
+     * 
+     * @param cm
+     * @return
+     * @throws Exception
+     */
+    public Complex interProduct(ComplexMatrix cm) throws Exception {
+        ComplexMatrix cv = this.adjoint().multiply(cm);
+        return cv.trace();
+
+    }
+
+    /**
+     * Returns the norm of the matrix = sqrt(traza(At*A)(real part))
+     * 
+     * @return
+     * @throws Exception
+     */
+    public double norm() throws Exception {
+        return Math.sqrt(this.transpose().multiply(this).trace().getReal());
+    }
+
+    
+        
+
+    
+
+    public double distance(ComplexMatrix c) throws Exception {
+        return this.substract(c).norm();
+
+    }
+
+    public boolean unitary() {        
+        try {           
+            ComplexMatrix c1 = this.multiply(this.adjoint());
+            for (int a = 0; a < I; a++) {
+                for (int b = 0; b < J; b++) {
+                    Complex C =c1.getMatrix()[a][b];
+                    if (a==b){
+                        if(!(C.getReal()==1 &&C.getImag()==0)){ return false;}
+                    }
+                    else{
+                        if(!(C.getReal()==0 &&C.getImag()==0)){ return false;}
+                    }
+                }
+            }
+            return true;
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+        }
+        
+    }
+
+    /**
+     * Hermitian: At = A
+     * @return
+     */
+    public boolean hermitian(){
+        if(I!=J){
+            return false;
+        }
+        return this.equals(this.adjoint());
+    }
+
+
+
+    public ComplexMatrix tensorProduct(ComplexMatrix c){
+        int I2 = c.getI();
+        int J2 = c.getJ();
+        Complex[][] tpc = new Complex[I*I2][J*J2]; 
+        /**
+         * cada A[i][j]*B es una seccion del tensor, que una nueva matriz, la 1 es la matriz que va en 
+         * el sector 1 que es la esq sup izq, el 2 es a la derecha de esa, a Aj de distancia, cuando se llega
+         * al final de la nueva, se baja la siguiente seccion de filas(g) y la cluman se vuelve 0 y repetir.
+         * ruega
+         */
+        
+        int g =0; 
+        int h =0;
+        for(int i=0;i<I;i++){            
+            for(int j=0;j<J;j++){    
+                Complex[][] r =escalarMultply(Matrix[i][j]); // la C[] que sale de A[i][j] *B
+                llenar(tpc, r, g,h);
+                h++;
+            }
+            h=0;
+            g++;
+
+            }
+        
+        return new ComplexMatrix(tpc);
+        }
+
+    
+
+    /**
+     * multiplica una matriz por un comlejo.
+     * @param c
+     * @return
+     */
+    private Complex[][] escalarMultply(Complex c){
+        Complex[][] mod = new Complex[I][J];
+        for(int i=0;i<I;i++){
+            for(int j =0; j<J;j++){
+                mod[i][j]=Matrix[i][j].Multiply(c);
+            }
+        }
+        return (mod);
+    }
+    /**
+     * se llena el Complex[][] de original (og) con la filler que es 1 elemento A[i][j] *B
+     * @param og
+     * @param filler
+     * @param vecesI
+     * @param vecesJ
+     * @return
+     */
+    private Complex[][] llenar(Complex[][] og, Complex[][] filler, int vecesI, int vecesJ){
+        int iF = filler.length;
+        int jF = filler[0].length;
+        int inicialI = iF*vecesI; //la fila desde donde se comenzara a llenar la og 
+        int inicialJ = jF*vecesJ; // la columna desde donde se comenzara a llenar la og
+        int itI =0;
+        int itJ =0;
+        for(int a =inicialI; a<inicialI+iF;a++){
+            for(int b =inicialJ; a<inicialJ+jF;b++){
+                og[a][b]= filler[itI][itJ];
+                itJ++;
+            }
+            itI++;
+
+        }
+        return og;
+
+
+
+    }
+
+    public Complex[][] getMatrix() {
         return Matrix;
     }
 
@@ -214,14 +443,28 @@ public class ComplexMatrix {
         return J;
     }
 
-    public ComplexVector getRow(int i) {
-        return Matrix.get(i);
-    }
-
     public void print() {
-        for (ComplexVector cv : Matrix) {
-            cv.print();
+
+        for (int a = 0; a < I; a++) {
+            String s = "";
+            for (int b = 0; b < J; b++) {
+                s += Matrix[a][b].print();
+            }
+            System.out.println(s);
         }
+
     }
 
+
+    public boolean equals(ComplexMatrix cm){
+        if(I!=cm.getI() || J!= cm.getJ()){return false;}
+        for(int i=0;i<I;i++){
+            for(int j=0;j<J;j++){
+                if(!(cm.getMatrix()[i][j].equals(Matrix[i][j]))){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

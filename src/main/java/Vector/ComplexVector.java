@@ -295,13 +295,11 @@ public class ComplexVector {
             Complex res = new Complex(0, 0);
 
             for (int i = 0; i < size; i++) {
-                Complex T =values.get(i).Multiply(c.getVector().get(i));
-               
-            
-                res=res.Add(T);
+                Complex T = values.get(i).Multiply(c.getVector().get(i));
+
+                res = res.Add(T);
             }
-            System.out.println(" de la matrix adition :"+res.print());
-            
+
             return res;
         } else
             throw new Exception();
@@ -316,6 +314,39 @@ public class ComplexVector {
 
         }
         System.out.println(s);
+    }
+
+    public ComplexVector conjugate() {
+        Complex[] c = new Complex[this.values.size()];
+        for (int i = 0; i < size; i++) {
+            c[i] = values.get(i).inverse();
+
+        }
+        return new ComplexVector(c);
+
+    }
+
+    public Complex interProduct(ComplexVector cv) throws Exception {
+        if (this.size != cv.getSize())
+            throw new Exception();
+        Complex ip = new Complex(0, 0);
+        ComplexVector cv2 = cv.conjugate();
+        for (int i = 0; i < size; i++) {
+            ip = ip.Add(values.get(i).Multiply(cv2.getVector().get(i)));
+        }
+        return ip;
+
+    }
+
+    public double norm() throws Exception {
+        return Math.sqrt(this.interProduct(this).getReal());
+    }
+
+    public double distance(ComplexVector cv) throws Exception {
+
+        ComplexVector r = this.Substraction(cv);
+        return Math.sqrt(r.interProduct(r).getReal());
+
     }
 
 }
