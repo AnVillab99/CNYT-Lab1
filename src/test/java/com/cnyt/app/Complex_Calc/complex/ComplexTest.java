@@ -1,7 +1,9 @@
-package complex;
+package com.cnyt.app.Complex_Calc.complex;
 
+import complex.Complex;
 import junit.framework.Assert;
 import junit.framework.TestCase;
+
 
 public class ComplexTest extends TestCase {
 

@@ -12,6 +12,19 @@ public class Complex {
 		parteImaginaria = sb;
 	}
 
+	public Complex(int sa, int sb) {
+		parteReal =  new Double(sa);
+		parteImaginaria = new Double(sb);
+	}
+	public Complex(double sa, int sb) {
+		parteReal = new Double(sa);
+		parteImaginaria = sb;
+	}
+	public Complex(int sa, double sb) {
+		parteReal = sa;
+		parteImaginaria = new Double(sb);
+	}
+
 	public Complex Add(Complex c) {
 		return new Complex(this.parteReal + c.getReal(), this.getImag() + c.getImag());
 
@@ -31,6 +44,19 @@ public class Complex {
 
 	}
 
+	public Complex SMultiply(double c){
+		double a = this.parteReal;
+		double b = this.getImag();
+		return new Complex((a * c), b);
+	}
+
+	public Complex inverse(){
+		double a = this.parteReal;
+		double b = this.getImag();
+		return new Complex(-a, -b);
+
+	}
+
 	public Complex Divide(Complex c) {
 		double a = this.parteReal;
 		double A = c.getReal();
@@ -43,9 +69,15 @@ public class Complex {
         BigDecimal imag = new BigDecimal(W).setScale(6, RoundingMode.HALF_UP);
         double dImag = imag.doubleValue();
 		return new Complex(dReal, dImag);
-
-
 	
+	}
+
+	public Complex SDivide(int c){
+		double a = this.parteReal;
+		double b = this.getImag();
+		return new Complex((a / c), (b/c));
+
+
 	}
 
 	public double Modulo() {
@@ -87,17 +119,6 @@ public class Complex {
 	}
 
 	public boolean equals(Complex c) {
-		double a = this.parteReal;
-		double A = c.getReal();
-		double b = this.getImag();
-		double B = c.getImag();
-		/*
-		 * System.out.println(a);System.out.println(A);System.out.println(b);System.out.
-		 * println(B);
-		 */
-		// System.out.println(" c " +Math.abs(a-A));
-		// System.out.println(Math.abs(a-A)<0.000001);
-		// System.out.println(" p " +Math.abs(b-B));
 		
 		if ((Math.abs((c.getImag() - (this.getImag()))) <= 0.0000001)
 				&& (Math.abs((c.getReal() - (this.getReal()))) <= 0.0000001)) {
