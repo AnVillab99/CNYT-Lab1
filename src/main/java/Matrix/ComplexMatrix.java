@@ -27,7 +27,11 @@ public class ComplexMatrix {
     public ComplexMatrix() {
 
     }
-
+    
+    /**
+     * ComplexMatrix constructor from a Complex[][]
+     * @param c Complex[][]
+     */
     public ComplexMatrix(Complex[][] c) {
         I = c.length;
         J = c[0].length;
@@ -37,7 +41,7 @@ public class ComplexMatrix {
     /**
      * ComplexMatrix constructor from an ComplexVector[]
      * 
-     * @param H
+     * @param H  ComplexVector[]
      * @throws Exception If any of the complexVectors of the array has a different
      *                   size;
      */
@@ -63,7 +67,7 @@ public class ComplexMatrix {
     /**
      * ComplexMatrix constructor from an ComplexVector[]
      * 
-     * @param H
+     * @param H ArrayList<ComplexVector> 
      * @throws Exception If any of the complexVectors of the array has a different
      *                   size;
      */
@@ -100,7 +104,7 @@ public class ComplexMatrix {
     /**
      * Add complex vectors from arraylist
      * 
-     * @param H
+     * @param H ArrayList<ComplexVector> 
      * @throws Exception
      */
     public void add(ArrayList<ComplexVector> H) throws Exception {
@@ -128,7 +132,7 @@ public class ComplexMatrix {
      * Adds two matrixes
      * 
      * @param D the matrix to add
-     * @return the added matrix
+     * @return ComplexMatrix the added matrix
      * @throws Exception if the matrixes arent the same dimensions
      */
     public ComplexMatrix addition(ComplexMatrix D) throws Exception {
@@ -150,7 +154,7 @@ public class ComplexMatrix {
      * Substracts two matrixes
      * 
      * @param D the matrix to substract
-     * @return the substracted matrix
+     * @return ComplexMatrix the substracted matrix
      * @throws Exception if the matrixes arent the same dimensions
      */
     public ComplexMatrix substract(ComplexMatrix D) throws Exception {
@@ -188,7 +192,6 @@ public class ComplexMatrix {
                 return res;
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
@@ -198,9 +201,9 @@ public class ComplexMatrix {
     /**
      * Multiplies 2 matrixes
      * 
-     * @param c
-     * @return
-     * @throws Exception
+     * @param c matrix to multiply
+     * @return Complex matrixmultiplied matrix
+     * @throws Exception If the mtrixes are from diffrent size
      */
     public ComplexMatrix multiply(ComplexMatrix c) throws Exception {
         // A x B
@@ -230,7 +233,6 @@ public class ComplexMatrix {
                 throw new Exception();
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
 
@@ -239,9 +241,9 @@ public class ComplexMatrix {
     }
 
     /**
-     * Resturn the transponse of the matrix
+     * Return the transponse of the matrix
      * 
-     * @return
+     * @return ComplexMAtrix transposed matrix
      */
     public ComplexMatrix transpose() {
         ComplexMatrix res = new ComplexMatrix(I, J);
@@ -258,7 +260,7 @@ public class ComplexMatrix {
     /**
      * Returns the conjugate of the matrix
      * 
-     * @return
+     * @return ComplexMatrix conjugated matrix
      */
     public ComplexMatrix conjugate() {
         ComplexMatrix res = new ComplexMatrix(I, J);
@@ -274,7 +276,7 @@ public class ComplexMatrix {
     /**
      * returns the adjoint of the matrix
      * 
-     * @return
+     * @return ComplexMAtrix adjoint of the matrix
      */
     public ComplexMatrix adjoint() {
         return this.transpose().conjugate();
@@ -292,8 +294,8 @@ public class ComplexMatrix {
     /**
      * Inner product of this and other matrix = trace (At*B)
      * 
-     * @param cm
-     * @return
+     * @param cm opther matrix
+     * @return Complex inner product
      * @throws Exception
      */
     public Complex interProduct(ComplexMatrix cm) throws Exception {
@@ -305,7 +307,7 @@ public class ComplexMatrix {
     /**
      * Returns the norm of the matrix = sqrt(traza(At*A)(real part))
      * 
-     * @return
+     * @return double the norm of this matrix
      * @throws Exception
      */
     public double norm() throws Exception {
@@ -316,12 +318,21 @@ public class ComplexMatrix {
         
 
     
-
+    /**
+     * Returns the distance between 2 matrixes
+     * @param c the other ComplexMatrix
+     * @return the distance
+     * @throws Exception if the matrixes are of different dimmensions
+     */
     public double distance(ComplexMatrix c) throws Exception {
         return this.substract(c).norm();
 
     }
 
+    /**
+     * Checks if the curretn matrix is unitary (A*Aadjoint )= I
+     * @return boolean
+     */
     public boolean unitary() {        
         try {           
             ComplexMatrix c1 = this.multiply(this.adjoint());
@@ -347,8 +358,8 @@ public class ComplexMatrix {
     }
 
     /**
-     * Hermitian: At = A
-     * @return
+     * Checks if the current matrix is Hermitian: At = A
+     * @return boolean
      */
     public boolean hermitian(){
         if(I!=J){
@@ -358,7 +369,11 @@ public class ComplexMatrix {
     }
 
 
-
+    /**
+     * Returns the tensor product between two matrixes
+     * @param c the other matrix
+     * @return ComplescMatrix the tensor product
+     */
     public ComplexMatrix tensorProduct(ComplexMatrix c){
         int I2 = c.getI();
         int J2 = c.getJ();
@@ -374,7 +389,7 @@ public class ComplexMatrix {
         int h =0;
         for(int i=0;i<I;i++){            
             for(int j=0;j<J;j++){    
-                Complex[][] r =escalarMultply(Matrix[i][j]); // la C[] que sale de A[i][j] *B
+                Complex[][] r =c.escalarMultply(Matrix[i][j]); // la C[] que sale de A[i][j] *B
                 llenar(tpc, r, g,h);
                 h++;
             }
@@ -390,7 +405,7 @@ public class ComplexMatrix {
 
     /**
      * multiplica una matriz por un comlejo.
-     * @param c
+     * @param c Complejo 
      * @return
      */
     private Complex[][] escalarMultply(Complex c){
@@ -398,6 +413,7 @@ public class ComplexMatrix {
         for(int i=0;i<I;i++){
             for(int j =0; j<J;j++){
                 mod[i][j]=Matrix[i][j].Multiply(c);
+                System.out.println("");
             }
         }
         return (mod);
@@ -418,10 +434,12 @@ public class ComplexMatrix {
         int itI =0;
         int itJ =0;
         for(int a =inicialI; a<inicialI+iF;a++){
-            for(int b =inicialJ; a<inicialJ+jF;b++){
+            for(int b =inicialJ; b<inicialJ+jF;b++){
                 og[a][b]= filler[itI][itJ];
+                
                 itJ++;
             }
+            itJ=0;
             itI++;
 
         }
@@ -430,6 +448,7 @@ public class ComplexMatrix {
 
 
     }
+
 
     public Complex[][] getMatrix() {
         return Matrix;
@@ -455,7 +474,11 @@ public class ComplexMatrix {
 
     }
 
-
+    /**
+     * Checks if this and the given matrix are equal
+     * @param cm the other matrix
+     * @return boolean
+     */
     public boolean equals(ComplexMatrix cm){
         if(I!=cm.getI() || J!= cm.getJ()){return false;}
         for(int i=0;i<I;i++){

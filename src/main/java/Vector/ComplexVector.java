@@ -219,7 +219,7 @@ public class ComplexVector {
             ArrayList<Complex> vr = new ArrayList<Complex>();
             ArrayList<Complex> v2 = cv.getVector();
             for (int i = 0; i < v2.size(); i++) {
-                vr.add(v2.get(i).Subtract(values.get(i)));
+                vr.add(values.get(i).Subtract(v2.get(i)));
             }
             r.add(vr);
             return r;
@@ -347,6 +347,14 @@ public class ComplexVector {
         ComplexVector r = this.Substraction(cv);
         return Math.sqrt(r.interProduct(r).getReal());
 
+    }
+
+    public boolean equals(ComplexVector c){
+        if(c.getSize() != size){return false;}
+        for(int i=0;i<size;i++){
+            if(!(c.getVector().get(i).equals(values.get(i)))){return false;}
+        }
+        return true;
     }
 
 }
